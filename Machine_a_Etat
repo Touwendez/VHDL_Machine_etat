@@ -1,0 +1,54 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity StateMachine is
+  port (
+    clk: in std_logic;
+    S: out std_logic_vector(1 downto 0)
+  );
+end entity StateMachine;
+
+architecture Behavioral of StateMachine is
+  -- Déclaration des types énumérés pour les états
+  type StateType is (E1, E2, E3, E4);
+  
+  -- Déclaration de la variable d'état actuelle
+  signal currentState: StateType := E1;
+begin
+  -- Processus séquentiel pour le changement d'état
+  process (clk)
+  begin
+    if rising_edge(clk) then
+      -- Passage inconditionnel à l'état suivant
+      case currentState is
+        when E1 =>
+          currentState <= E2;
+        when E2 =>
+          currentState <= E3;
+        when E3 =>
+          currentState <= E4;
+        when E4 =>
+          currentState <= E1;
+        when others =>
+          currentState <= E1;
+      end case;
+    end if;
+  end process;
+
+  -- Processus combinatoire pour la sortie S
+  process (currentState)
+  begin
+    case currentState is
+      when E1 =>
+        S <= "00";
+      when E2 =>
+        S <= "01";
+      when E3 =>
+        S <= "10";
+      when E4 =>
+        S <= "11";
+      when others =>
+        S <= "00";
+    end case;
+  end process;
+end architecture Behavioral;
